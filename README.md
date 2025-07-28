@@ -1,70 +1,102 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 📝 My Diary Web App
 
-## Available Scripts
+React + Firebase 기반으로 구현된 **다이어리 & 메모 웹 앱**입니다.  
+**회원 가입 후 자유롭게 글을 쓰고**, 태그와 카테고리로 정리하고, 필터링/정렬을 통해 손쉽게 열람할 수 있습니다.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🧩 프로젝트 개요
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| 항목       | 내용                                                                 |
+|----------|----------------------------------------------------------------------|
+| 개발 목적  | 사용자 인증 기반 글 작성 및 열람 기능, 실시간 반영되는 메모 플랫폼 구현                  |
+| 주요 기능  | 로그인/회원가입, 글 작성·수정·삭제, 태그 관리, 필터/정렬, 다크모드, 라우팅 가드 등 |
+| 핵심 기술  | React, Firebase(Auth + Firestore), React Router, SCSS              |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🧭 라우팅 구조
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| 경로             | 설명                          |
+|----------------|-----------------------------|
+| `/`            | 홈 / 전체 글 보기               |
+| `/login`       | 로그인 페이지                   |
+| `/signup`      | 회원가입 페이지                 |
+| `/post/:id`    | 글 상세 페이지                  |
+| `/write`       | 글 작성 (로그인 필요)           |
+| `/edit/:id`    | 글 수정 (로그인 필요)           |
+| `/myposts`     | 내가 쓴 글 목록 (로그인 필요)    |
+| `*`            | 존재하지 않는 페이지 - NotFound |
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## ✨ 주요 기능
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 🔐 사용자 인증 (Firebase Auth + Context API)
+- 이메일/비밀번호 기반 로그인 & 회원가입
+- Firestore에 사용자 닉네임 저장 및 불러오기
+- `AuthContext`를 통한 로그인 상태 전역 관리
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 📄 게시글 작성 및 관리
+- 글 작성, 수정, 삭제
+- 카테고리: quote / memo
+- 태그 입력 및 표시 (`쉼표` 구분)
+- 정렬 기능: 최신순, 오래된순
+- 실시간 데이터 반영 (`onSnapshot`)
+- 작성자 본인에게만 수정/삭제 버튼 노출
 
-### `npm run eject`
+### 🌙 다크모드 지원
+- 버튼 클릭 시 `light` ↔ `dark` 전환
+- localStorage를 통한 테마 유지
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 🧭 라우팅 보호 (Protected Routes)
+- `RequireAuth` 컴포넌트로 로그인하지 않은 유저 차단
+- 글쓰기/수정 진입 시 로그인 여부 체크
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🗂️ 폴더 구조 요약
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+src/
+├── App.js                # 라우팅 설정
+├── index.js              # AuthProvider + Router 설정
+├── layouts/
+│   └── Layout.jsx        # 공통 레이아웃: 사이드 메뉴 + 메인 + 플로팅 버튼
+├── components/           # 재사용 가능한 UI 요소들
+│   ├── DarkModeToggle.jsx
+│   ├── WriteNewPost.jsx
+│   ├── GoToLogin.jsx / GoToHome.jsx
+│   └── ...
+├── features/
+│   ├── auth/
+│   │   ├── AuthContext.jsx
+│   │   ├── LoginForm.jsx
+│   │   └── SignupForm.jsx
+│   └── post/
+│       └── PostList.jsx
+├── pages/                # 라우팅되는 실제 페이지 컴포넌트
+│   ├── Home.jsx
+│   ├── Detail.jsx
+│   ├── Login.jsx / Signup.jsx
+│   ├── Write.jsx
+│   ├── MyPosts.jsx
+│   └── NotFound.jsx
+├── utils/
+│   └── firebase.js       # Firebase 초기화
+└── styles/
+    ├── reset.scss        # 초기화
+    ├── variables.scss    # 색상/폰트 변수
+    └── style.scss        # 전체 스타일
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🧼 기타 참고 사항
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Firestore의 Timestamp는 `YYYY-MM-DD` 포맷으로 출력
+- 글 제목은 80자 제한, 태그는 쉼표로 분리
+- 작성 시 유효성 검사 포함 (제목/내용/카테고리 누락 시 경고)
+- 작성/수정 완료 후 상세 페이지로 자동 이동
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

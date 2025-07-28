@@ -9,7 +9,6 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Detail from "./pages/Detail";
 import Write from "./pages/Write";
-import MyPosts from "./pages/MyPosts";
 import NotFound from "./pages/NotFound";
 
 import RequireAuth from "./components/RequireAuth"; // 로그인 체크용
@@ -36,7 +35,6 @@ function App() {
           <Route path="write" element={<Write />} />
           <Route path="edit/:postId" element={<Write isEdit={true} />} />
           {/* isEdit={true} : URL이나 상태에서 오는 게 아니라 라우팅 코드에서 수동으로 주입한 props */}
-          <Route path="myposts" element={<MyPosts />} />
         </Route>
 
         {/* 없는 페이지 */}
