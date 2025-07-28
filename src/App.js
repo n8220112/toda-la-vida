@@ -1,24 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import {Routes, Route} from "react-router-dom";
+
+/* layouts */
+import Layout from "./layouts/Layout";
+
+/* pages */
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Detail from "./pages/Detail";
+import Write from "./pages/Write";
+import MyPosts from "./pages/MyPosts";
+import NotFound from "./pages/NotFound";
+
+import RequireAuth from "./components/RequireAuth"; // 로그인 체크용
+
+/* styles */
+import "./styles/style.scss";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* 메인 */}
+        <Route index element={<Home />} />
+
+        {/* 회원 */}
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+
+        {/* 글 상세 */}
+        <Route path="post/:postId" element={<Detail />} />
+
+        {/* 로그인 후에만 가능한 영역 */}
+        <Route element={<RequireAuth />}>
+          <Route path="write" element={<Write />} />
+          <Route path="edit/:postId" element={<Write isEdit={true} />} />
+          {/* isEdit={true} : URL이나 상태에서 오는 게 아니라 라우팅 코드에서 수동으로 주입한 props */}
+          <Route path="myposts" element={<MyPosts />} />
+        </Route>
+
+        {/* 없는 페이지 */}
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 

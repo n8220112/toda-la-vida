@@ -1,0 +1,21 @@
+// 공통 색상 변수
+:root {
+  --bg-color: #f3f5f7;
+  --text-color: #333;
+  --border-color: #ccc;
+  --accent-color: #aaa;
+  --border-sub-color: #ddd;
+  --card-bg: #fafafa;
+  --drag-bg: #9eb9d8;
+}
+
+// 다크 모드
+html[data-theme="dark"] {
+  --bg-color: #222;
+  --text-color: #eeeeee;
+  --border-color: #666;
+  --accent-color: #777;
+  --border-sub-color: #666;
+  --card-bg: #333;
+  --drag-bg: #9eb9d8;
+}
